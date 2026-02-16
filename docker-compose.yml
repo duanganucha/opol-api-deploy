@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # OPOL API Service (Pulling from GitHub Container Registry)
   opol-api:
