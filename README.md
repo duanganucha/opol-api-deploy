@@ -66,7 +66,8 @@ docker-compose up -d
 4. **การอัปเดตระบบ (Update)**:
    หากมีการอัปเดตเวอร์ชันใหม่ ให้รันคำสั่ง:
    ```bash
-   docker-compose up -d --build
+   docker-compose pull
+   docker-compose up -d
    ```
 
 5. **การหยุดระบบ (Stop)**:
