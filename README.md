@@ -1,29 +1,69 @@
-# OPOL-API Deployment
+# คู่มือการติดตั้งและใช้งาน OPOL-API
 
-This repository contains only the necessary files to deploy the OPOL-API service using Docker.
+โปรเจกต์นี้บรรจุไฟล์ที่จำเป็นสำหรับการรันระบบ **OPOL-API** โดยใช้ Docker เท่านั้น ซึ่งจะทำการดาวน์โหลดไฟล์โปรแกรมจาก GitHub Container Registry (GHCR) โดยตรง ทำให้คุณสามารถรันระบบได้ทันทีโดยไม่ต้องเข้าถึงซอร์สโค้ด
 
-## Prerequisites
+## สิ่งที่ต้องเตรียม (Prerequisites)
 
-- Docker
-- Docker Compose
+- **Docker**: ติดตั้งให้เรียบร้อย (แนะนำ Docker Desktop สำหรับ Windows/Mac)
+- **Docker Compose**: ปกติจะมาพร้อมกับ Docker อยู่แล้ว
 
-## Quick Start
+---
 
-1. **Clone this repository** (or copy these files) to your server.
-2. **Setup environment variables**:
+## ขั้นตอนการติดตั้งแบบละเอียด (Step-by-Step)
+
+### 1. นำไฟล์ขึ้น Server/เครื่องรันงาน
+คุณสามารถเลือกทำได้ 2 วิธี:
+- **วิธีที่ 1 (ใช้ Git)**: รันคำสั่ง 
+  ```bash
+  git clone https://github.com/duanganucha/opol-api-deploy.git
+  cd opol-api-deploy
+  ```
+- **วิธีที่ 2 (Copy ไฟล์)**: ก๊อปปี้ไฟล์ `docker-compose.yml` และ `.env.example` ไปวางในโฟลเดอร์ที่คุณสร้างขึ้นใหม่
+
+### 2. ตั้งค่าสภาพแวดล้อม (Environment Variables)
+ก๊อปปี้ไฟล์ตัวอย่างเพื่อสร้างไฟล์ตั้งค่าจริง:
+```bash
+cp .env.example .env
+```
+
+### 3. แก้ไขข้อมูลในไฟล์ .env
+เปิดไฟล์ `.env` ด้วยโปรแกรมแก้ไขข้อความ (เช่น Notepad, VS Code, หรือ nano) และแก้ไขค่าต่อไปนี้ให้ตรงกับระบบของคุณ:
+- **`DB_HOST`**: ใส่ IP ของฐานข้อมูล
+- **`DB_USER` / `DB_PASSWORD`**: รหัสผ่านเข้าฐานข้อมูล
+- **`DB_NAME`**: ชื่อฐานข้อมูลที่ใช้งาน
+- **`HIS`**: ชื่อระบบ HIS ที่ใช้ (เช่น `HOSXP_MYSQL`, `HOSXP_PGSQL`)
+- **`JWT_SECRET`**: กำหนดรหัสความปลอดภัยสำหรับ Token (ห้ามเว้นว่าง)
+
+### 4. สั่งรันระบบ
+เปิด Terminal หรือ Command Prompt ในโฟลเดอร์นั้นแล้วรันคำสั่ง:
+```bash
+docker-compose up -d
+```
+*ระบบจะเริ่มดาวน์โหลด Image จาก GitHub และรันขึ้นมาให้โดยอัตโนมัติ*
+
+---
+
+## วิธีการตรวจสอบสถานะระบบ
+
+1. **เช็คว่า Container รันอยู่หรือไม่**:
    ```bash
-   cp .env.example .env
+   docker ps
    ```
-3. **Configure the `.env` file**: 
-   Open `.env` and fill in your database credentials and other settings.
-4. **Deploy the service**:
+   คุณควรเห็น `opol-api` และ `autoheal` พร้อมสถานะ `Up` หรือ `healthy`
+
+2. **เช็คหน้า Health Check**:
+   เปิด Browser ไปที่: `http://localhost:3000/api/status/health`
+
+3. **ดู Log การทำงาน**:
    ```bash
-   docker-compose up -d
+   docker logs -f opol-api
    ```
 
-## Registry Details
+---
 
+## ข้อมูลทางเทคนิค
 - **Image**: `ghcr.io/duanganucha/opol-api:latest`
 - **Owner**: duanganucha
+- **Developer**: duanganucha
 
-The service will automatically pull the latest image from the GitHub Container Registry.
+*หากมีข้อสงสัยเพิ่มเติม สามารถติดต่อทีมพัฒนาได้ทันทีครับ*
