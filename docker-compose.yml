@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # OPOL API Service (Pulling from GitHub Container Registry)
+  opol-api:
+    image: ghcr.io/duanganucha/opol-api:latest
+    container_name: opol-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      # Database Configuration
+      - DB_HOST=${DB_HOST:-127.0.0.1}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      
+      # Application Configuration
+      - HIS=${HIS:-HOSXP_MYSQL}
+      - API_ENDPOINT=${API_ENDPOINT}
+      - TOKEN_KEY=${TOKEN_KEY}
+      - HN_LENGTH=${HN_LENGTH:-9}
+      - CODE_ROOM=${CODE_ROOM}
+      - PORT=3000
+      
+      # Security
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET_is_required}
+      
+      # Node Environment
+      - NODE_ENV=production
+    
+    labels:
+      - "autoheal=true"
+
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/status/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Autoheal Service
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: autoheal
+    restart: always
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=autoheal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
