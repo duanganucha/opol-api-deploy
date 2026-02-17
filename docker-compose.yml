@@ -24,7 +24,7 @@ services:
       - PORT=3000
       
       # Security
-      - "JWT_SECRET=${JWT_SECRET:?JWT_SECRET_is_required}"
+      - "JWT_SECRET=${JWT_SECRET}"
       
       # Node Environment
       - NODE_ENV=production
