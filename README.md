@@ -25,7 +25,7 @@
 ```bash
 cp .env.example .env
 ```
-
+### His = HOSXP_PGSQL , HOSXP_MYSQL , HIMPRO
 ### 3. แก้ไขข้อมูลในไฟล์ .env
 เปิดไฟล์ `.env` ด้วยโปรแกรมแก้ไขข้อความ (เช่น Notepad, VS Code, หรือ nano) และแก้ไขค่าต่อไปนี้ให้ตรงกับระบบของคุณ:
 - **`DB_HOST`**: ใส่ IP ของฐานข้อมูล
