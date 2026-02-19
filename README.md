@@ -75,6 +75,11 @@ docker-compose up -d
    ```bash
    docker-compose down
    ```
+6. **KeyError : ContainerConfig อาการหลัง Config**:
+   หากต้องการหยุดการทำงานทั้งหมด:
+   ```bash
+   docker-compose down --remove-orphans
+   ```
 
 ---
 
